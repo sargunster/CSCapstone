@@ -98,3 +98,6 @@ db.sqlite3
 # images
 .png
 .jpg
+
+# Pycharm
+.idea/
