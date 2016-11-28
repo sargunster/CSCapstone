@@ -22,9 +22,11 @@ class RegisterForm(forms.Form):
     firstname = forms.CharField(label="First name", widget=forms.TextInput, required=False)
     lastname = forms.CharField(label="Last name", widget=forms.TextInput, required=False)
 
-    student = forms.NullBooleanField(label="Is student?", widget=forms.NullBooleanSelect, required=False)
-    professor = forms.NullBooleanField(label="Is professor?", widget=forms.NullBooleanSelect, required=False)
-    engineer = forms.NullBooleanField(label="Is engineer?", widget=forms.NullBooleanSelect, required=False)
+    about = forms.CharField(label="About", widget=forms.Textarea, required=False)
+
+    student = forms.BooleanField(label="Is student?", widget=forms.CheckboxInput, required=False)
+    professor = forms.BooleanField(label="Is professor?", widget=forms.CheckboxInput, required=False)
+    engineer = forms.BooleanField(label="Is engineer?", widget=forms.CheckboxInput, required=False)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -56,7 +58,7 @@ class UpdateForm(forms.ModelForm):
     class Meta:
         model = MyUser
         fields = ('email', 'password', 'first_name', 'last_name',
-                  'is_student', 'is_professor', 'is_engineer')
+                  'is_student', 'is_professor', 'is_engineer', 'about')
 
     def clean_password(self):
         return self.initial["password"]
@@ -107,13 +109,13 @@ class UpdateForm(forms.ModelForm):
         is_engineer = self.cleaned_data.get("is_engineer")
         # Classify the Users as Students, Professors, Engineers
         if is_student == True and is_professor == True and is_engineer == True:
-            raise forms.ValidationError("User cannot be Student, Professor and Enginner at the same time!")
+            raise forms.ValidationError("User cannot be Student, Professor and Engineer at the same time!")
         elif is_student == True and is_engineer == True:
-            raise forms.ValidationError("User cannot be Student and Enginner at the same time!")
+            raise forms.ValidationError("User cannot be Student and Engineer at the same time!")
         elif is_student == True and is_professor == True:
             raise forms.ValidationError("User cannot be Student and Professor at the same time!")
         elif is_engineer == True and is_professor == True:
-            raise forms.ValidationError("User cannot be Professor and Enginner at the same time!")
+            raise forms.ValidationError("User cannot be Professor and Engineer at the same time!")
 
 
 """Admin Forms"""
@@ -157,7 +159,7 @@ class UserChangeForm(forms.ModelForm):
         model = MyUser
         # fields = ('email', 'password', 'first_name', 'last_name', 'is_active', 'is_admin')
         fields = ('email', 'password', 'first_name', 'last_name', 'is_active', 'is_admin',
-                  'is_student', 'is_professor', 'is_engineer')
+                  'is_student', 'is_professor', 'is_engineer', 'about')
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.

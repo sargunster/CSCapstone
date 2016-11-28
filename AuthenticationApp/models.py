@@ -12,7 +12,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 # Create your models here.
 class MyUserManager(BaseUserManager):
     def create_user(self, email=None, password=None, first_name=None, last_name=None,
-                    is_student=None, is_professor=None, is_engineer=None):
+                    is_student=None, is_professor=None, is_engineer=None, about=None):
         if not email:
             raise ValueError('Users must have an email address')
 
@@ -29,13 +29,12 @@ class MyUserManager(BaseUserManager):
 
         user.last_name = last_name
 
-        # Classify the Users as Students, Professors, Engineers
-        if is_student:
-            user.is_student = True
-        if is_professor:
-            user.is_professor = True
-        if is_engineer:
-            user.is_engineer = True
+        user.is_student = is_student
+        user.is_professor = is_professor
+        user.is_engineer = is_engineer
+
+        if about is not None:
+            user.about = about
 
         user.save(using=self._db)
         return user
@@ -86,6 +85,8 @@ class MyUser(AbstractBaseUser):
     is_student = models.BooleanField(default=False, )
     is_professor = models.BooleanField(default=False, )
     is_engineer = models.BooleanField(default=False, )
+
+    about = models.TextField(default='Nothing here :(', )
 
     objects = MyUserManager()
 
