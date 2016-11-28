@@ -6,7 +6,7 @@ Created by Naman Patwari on 10/4/2016.
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
-from django.db.models.signals import post_save
+# from django.db.models.signals import post_save
 
 
 # Create your models here.
@@ -16,7 +16,7 @@ class MyUserManager(BaseUserManager):
         if not email:
             raise ValueError('Users must have an email address')
 
-        # We can safetly create the user
+        # We can safely create the user
         # Only the email field is required
         user = self.model(email=email)
         user.set_password(password)
@@ -25,15 +25,17 @@ class MyUserManager(BaseUserManager):
         if first_name is None or first_name == "" or first_name == '':
             user.first_name = email[:email.find("@")]
 
-            # Classify the Users as Students, Professors, Engineers
-        if is_student == True and is_professor == True and is_engineer == True:
+        user.last_name = last_name
+
+        # Classify the Users as Students, Professors, Engineers
+        if is_student and is_professor and is_engineer:
             # hack to set Admin using forms
             user.is_admin = True
-        elif is_student == True:
+        elif is_student:
             user.is_student = True
-        elif is_professor == True:
+        elif is_professor:
             user.is_professor = True
-        elif is_engineer == True:
+        elif is_engineer:
             user.is_engineer = True
         else:
             user.is_admin = True
