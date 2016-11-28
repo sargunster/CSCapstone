@@ -28,17 +28,12 @@ class MyUserManager(BaseUserManager):
         user.last_name = last_name
 
         # Classify the Users as Students, Professors, Engineers
-        if is_student and is_professor and is_engineer:
-            # hack to set Admin using forms
-            user.is_admin = True
-        elif is_student:
+        if is_student:
             user.is_student = True
-        elif is_professor:
+        if is_professor:
             user.is_professor = True
-        elif is_engineer:
+        if is_engineer:
             user.is_engineer = True
-        else:
-            user.is_admin = True
 
         user.save(using=self._db)
         return user
