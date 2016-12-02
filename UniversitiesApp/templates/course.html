@@ -33,6 +33,15 @@
 				</tbody>
 			</table>
 		</div>
+        {%  if userIsTeacher %}
+            <div>
+                <form action="/university/course/adds?name={{ university.name }}&course={{ course.tag }}" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="email" id="email" placeholder="Email">
+                    <input type="submit" value="Add Student">
+                </form>
+            </div>
+        {% endif %}
 	</div>
 	
 {% endblock %}
