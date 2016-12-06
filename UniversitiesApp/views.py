@@ -5,7 +5,7 @@ Created by Jacob Dunbar on 11/5/2016.
 """
 from django.shortcuts import render
 
-from UniversitiesApp.forms import StudentForm
+from UniversitiesApp.forms import StudentForm, CourseForm
 from . import models
 from . import forms
 
@@ -111,7 +111,7 @@ def getCourse(request):
             'university': in_university,
             'course': in_course,
             'userInCourse': is_member,
-            'userIsTeacher': True,
+            'userIsTeacher': request.user == in_course.professor,
             'form': StudentForm()
         }
         return render(request, 'course.html', context)
@@ -123,7 +123,7 @@ def courseForm(request):
         in_university_name = request.GET.get('name', 'None')
         in_university = models.University.objects.get(name__exact=in_university_name)
         context = {
-            'university': in_university,
+            'university': in_university
         }
         return render(request, 'courseform.html', context)
         # render error page if user is not logged in
@@ -140,10 +140,13 @@ def addCourse(request):
                 if in_university.course_set.filter(tag__exact=form.cleaned_data['tag']).exists():
                     return render(request, 'courseform.html',
                                   {'error': 'Error: That course tag already exists at this university!'})
+                in_professor_email = form.cleaned_data['professor']
+                in_professor = models.MyUser.objects.get(email__exact=in_professor_email)
                 new_course = models.Course(tag=form.cleaned_data['tag'],
                                            name=form.cleaned_data['name'],
                                            description=form.cleaned_data['description'],
-                                           university=in_university)
+                                           university=in_university,
+                                           professor=in_professor)
                 new_course.save()
                 in_university.course_set.add(new_course)
                 is_member = in_university.members.filter(email__exact=request.user.email)
@@ -179,11 +182,11 @@ def removeCourse(request):
 
 
 def addStudentToCourse(request):
-    if request.user.is_authenticated() and (request.user.is_professor or request.user.is_admin):
-        in_university_name = request.GET.get('name', 'None')
-        in_university = models.University.objects.get(name__exact=in_university_name)
-        in_course_tag = request.GET.get('course', 'None')
-        in_course = in_university.course_set.get(tag__exact=in_course_tag)
+    in_university_name = request.GET.get('name', 'None')
+    in_university = models.University.objects.get(name__exact=in_university_name)
+    in_course_tag = request.GET.get('course', 'None')
+    in_course = in_university.course_set.get(tag__exact=in_course_tag)
+    if request.user.is_authenticated() and (request.user is in_course.professor or request.user.is_admin):
         form = StudentForm(request.POST)
         users = models.MyUser.objects.filter(email__exact=form.data['email'])
         if users.exists() is False:
@@ -196,7 +199,7 @@ def addStudentToCourse(request):
             'university': in_university,
             'course': in_course,
             'userInCourse': in_course.members.filter(email__exact=request.user.email),
-            'userIsTeacher': True,
+            'userIsTeacher': request.user == in_course.professor,
             'form': StudentForm()
         }
         return render(request, 'course.html', context)
@@ -221,7 +224,7 @@ def joinCourse(request):
             'university': in_university,
             'course': in_course,
             'userInCourse': True,
-            'userIsTeacher': True
+            'userIsTeacher': request.user == in_course.professor
         }
         return render(request, 'course.html', context)
     return render(request, 'autherror.html')
@@ -241,7 +244,7 @@ def unjoinCourse(request):
             'university': in_university,
             'course': in_course,
             'userInCourse': False,
-            'userIsTeacher': True
+            'userIsTeacher': request.user == in_course.professor
         }
         return render(request, 'course.html', context)
     return render(request, 'autherror.html')
