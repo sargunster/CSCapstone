@@ -88,3 +88,26 @@ def update_profile(request):
         "links": ["logout"],
     }
     return render(request, 'auth_form.html', context)
+
+
+def get_users(request):
+    if request.user.is_authenticated():
+        users_list = MyUser.objects.all()
+        context = {
+            'users': users_list,
+        }
+        return render(request, 'users.html', context)
+    # render error page if user is not logged in
+    return render(request, 'autherror.html')
+
+
+def get_user(request):
+    if request.user.is_authenticated():
+        in_email = request.GET.get('email', 'None')
+        in_user = MyUser.objects.get(email__exact=in_email)
+        context = {
+            'user': in_user
+        }
+        return render(request, 'user.html', context)
+    # render error page if user is not logged in
+    return render(request, 'autherror.html')

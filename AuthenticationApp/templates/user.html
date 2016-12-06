@@ -1,0 +1,25 @@
+{% extends "body.html" %}
+
+{% block content %}
+    <!-- Content -->
+    <div class="container theme-showcase" role="main">
+        <div class="jumbotron">
+            <h3>{{ user.get_full_name }}</h3>
+            <p>
+                {% if user.is_student %}
+                    Student
+                {% elif user.is_professor %}
+                    Professor
+                {% elif user.is_engineer %}
+                    Engineer
+                {% elif user.is_admin %}
+                    Admin
+                {% else %}
+                    None
+                {% endif %}
+            </p>
+            <p>{{ user.email }}</p>
+            <p>{{ user.about }}</p>
+        </div>
+    </div>
+{% endblock %}

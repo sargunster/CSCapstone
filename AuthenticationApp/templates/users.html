@@ -1,0 +1,99 @@
+{% extends "body.html" %}
+
+{% block content %}
+
+    <!-- Content -->
+    <div class="container" role="main">
+        <div class="table-responsive">
+            <h3>Students</h3>
+            <table class="table table-striped sortable">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>About</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in users %}
+                    {% if item.is_student %}
+                        <tr>
+                            <td><a href="/user?email={{ item.email }}">{{ item.get_full_name }}</a>
+                            </td>
+                            <td>{{ item.email }}</td>
+                            <td>{{ item.about }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <h3>Professors</h3>
+            <table class="table table-striped sortable">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>About</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in users %}
+                    {% if item.is_professor %}
+                        <tr>
+                            <td><a href="/user?email={{ item.email }}">{{ item.first_name }} {{ item.last_name }}</a>
+                            </td>
+                            <td>{{ item.email }}</td>
+                            <td>{{ item.about }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <h3>Engineers</h3>
+            <table class="table table-striped sortable">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>About</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in users %}
+                    {% if item.is_engineer %}
+                        <tr>
+                            <td><a href="/user?email={{ item.email }}">{{ item.first_name }} {{ item.last_name }}</a>
+                            </td>
+                            <td>{{ item.email }}</td>
+                            <td>{{ item.about }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <h3>Admins</h3>
+            <table class="table table-striped sortable">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>About</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in users %}
+                    {% if item.is_admin %}
+                        <tr>
+                            <td><a href="/user?email={{ item.email }}">{{ item.first_name }} {{ item.last_name }}</a>
+                            </td>
+                            <td>{{ item.email }}</td>
+                            <td>{{ item.about }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
