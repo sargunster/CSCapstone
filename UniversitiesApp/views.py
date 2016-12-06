@@ -185,13 +185,13 @@ def addStudentToCourse(request):
         in_course_tag = request.GET.get('course', 'None')
         in_course = in_university.course_set.get(tag__exact=in_course_tag)
         form = StudentForm(request.POST)
-        user = models.MyUser.objects.filter(email__exact=form.data['email'])
-        if user.exists() is False:
+        users = models.MyUser.objects.filter(email__exact=form.data['email'])
+        if users.exists() is False:
             return getCourse(request)
-        in_course.members.add(user[0])
+        in_course.members.add(users[0])
         in_course.save()
-        user[0].course_set.add(in_course)
-        user[0].save()
+        users[0].course_set.add(in_course)
+        users[0].save()
         context = {
             'university': in_university,
             'course': in_course,
