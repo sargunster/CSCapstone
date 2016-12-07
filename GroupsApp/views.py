@@ -3,6 +3,7 @@ Created by Naman Patwari on 10/10/2016.
 """
 from django.shortcuts import render
 
+from GroupsApp.forms import MemberForm
 from . import models
 from . import forms
 
@@ -44,8 +45,12 @@ def getGroupFormSuccess(request):
                     return render(request, 'groupform.html', {'error' : 'Error: That Group name already exists!'})
                 new_group = models.Group(name=form.cleaned_data['name'], description=form.cleaned_data['description'])
                 new_group.save()
+                new_group.members.add(request.user)
+                new_group.save()
+                request.user.group_set.add(new_group)
+                request.user.save()
                 context = {
-                    'name' : form.cleaned_data['name'],
+                    'name': form.cleaned_data['name'],
                 }
                 return render(request, 'groupformsuccess.html', context)
         else:
@@ -54,33 +59,15 @@ def getGroupFormSuccess(request):
     # render error page if user is not logged in
     return render(request, 'autherror.html')
 
-def joinGroup(request):
-    if request.user.is_authenticated():
-        in_name = request.GET.get('name', 'None')
-        in_group = models.Group.objects.get(name__exact=in_name)
-        in_group.members.add(request.user)
-        in_group.save();
-        request.user.group_set.add(in_group)
-        request.user.save()
-        context = {
-            'group' : in_group,
-            'userIsMember': True,
-        }
-        return render(request, 'group.html', context)
+def addToGroup(request):
+    in_group_name = request.GET.get('name', 'None')
+    in_group = models.Group.objects.get(name__exact=in_group_name)
+    if request.user.is_authenticated() and in_group.members.filter(email__exact=request.user.email).exists():
+        form = MemberForm(request.POST)
+        new_member = models.MyUser.objects.get(email__exact=form.data['email'])
+        new_member.group_set.add(in_group)
+        new_member.save()
+        in_group.members.add(new_member)
+        in_group.save()
+        return getGroup(request)
     return render(request, 'autherror.html')
-    
-def unjoinGroup(request):
-    if request.user.is_authenticated():
-        in_name = request.GET.get('name', 'None')
-        in_group = models.Group.objects.get(name__exact=in_name)
-        in_group.members.remove(request.user)
-        in_group.save();
-        request.user.group_set.remove(in_group)
-        request.user.save()
-        context = {
-            'group' : in_group,
-            'userIsMember': False,
-        }
-        return render(request, 'group.html', context)
-    return render(request, 'autherror.html')
-    
