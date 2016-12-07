@@ -207,6 +207,27 @@ def addStudentToCourse(request):
 
 
 def removeStudentFromCourse(request):
+    in_university_name = request.GET.get('name', 'None')
+    in_university = models.University.objects.get(name__exact=in_university_name)
+    in_course_tag = request.GET.get('course', 'None')
+    in_course = in_university.course_set.get(tag__exact=in_course_tag)
+    if request.user.is_authenticated() and (request.user is in_course.professor or request.user.is_admin):
+        in_email = request.GET.get('member', 'None')
+        users = models.MyUser.objects.filter(email__exact=in_email)
+        if users.exists() is False:
+            return getCourse(request)
+        in_course.members.remove(users[0])
+        in_course.save()
+        users[0].course_set.remove(in_course)
+        users[0].save()
+        context = {
+            'university': in_university,
+            'course': in_course,
+            'userInCourse': in_course.members.filter(email__exact=request.user.email),
+            'userIsTeacher': request.user == in_course.professor,
+            'form': StudentForm()
+        }
+        return render(request, 'course.html', context)
     return render(request, 'autherror.html')
 
 
