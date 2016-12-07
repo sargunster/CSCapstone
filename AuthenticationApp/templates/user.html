@@ -7,19 +7,19 @@
             <h3>{{ user.get_full_name }}</h3>
             <p>
                 {% if user.is_student %}
-                    Student
+                    Student at <a href="/university?name={{ user.university_set.first.name }}">{{ user.university_set.first.name }}</a>
                 {% elif user.is_professor %}
-                    Professor
+                    Professor at <a href="/university?name={{ user.university_set.first.name }}">{{ user.university_set.first.name }}</a>
                 {% elif user.is_engineer %}
-                    Engineer
+                    Engineer at <a href="/company?name={{ user.company_set.first.name }}">{{ user.company_set.first.name }}</a>
                 {% elif user.is_admin %}
-                    Admin
+                    Site Admin
                 {% else %}
                     None
                 {% endif %}
             </p>
-            <p>{{ user.email }}</p>
-            <p>{{ user.about }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>About me: {{ user.about }}</p>
         </div>
     </div>
 {% endblock %}
