@@ -73,7 +73,10 @@ def joinUniversity(request):
         in_name = request.GET.get('name', 'None')
         in_university = models.University.objects.get(name__exact=in_name)
         in_university.members.add(request.user)
-        in_university.save();
+        in_university.save()
+        if request.user.university_set.count() > 0:
+            universities = request.user.university_set.all()
+            request.user.university_set.remove(universities[0])
         request.user.university_set.add(in_university)
         request.user.save()
         context = {
