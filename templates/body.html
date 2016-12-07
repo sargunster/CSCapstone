@@ -16,33 +16,25 @@
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
+                <li><a href="/users">Users</a> </li>
+                <li><a href="/group/all">Groups</a></li>
+                <li><a href="/project/all">Projects</a></li>
+                <li><a href="/company/all">Companies</a></li>
+                <li><a href="/university/all">Universities</a></li>
 				{% if user.is_authenticated == False %}
 					<li><a href="/login">Login</a></li>
 					<li><a href="/register">Register</a></li>
 				{% else %}
-					<li><a href="/update">Update Profile</a></li>
-                    <li><a href="/users">Users</a> </li>
-					<li role="presentation" class="dropdown">
+                    <li role="presentation" class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						  Groups/Organizations <span class="caret"></span>
+						  {{ user.get_full_name }}<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="/company/all">Companies</a></li>
-							<li><a href="/university/all">Universities</a></li>
-							<li><a href="/group/all">Groups</a></li>
+							<li><a href="/user?email={{ user.email }}">View Account</a></li>
+							<li><a href="/update">Edit Info</a></li>
+							<li><a href="/logout">Logout</a></li>
 						</ul>
 					</li>
-					<li role="presentation" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						  Create new Group/Organization <span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="/company/form">Create Company</a></li>
-							<li><a href="/university/form">Create University</a></li>
-							<li><a href="/group/form">Create Group</a></li>
-						</ul>
-					</li>
-					<li><a href="/logout">Logout</a></li>
 				{% endif %}
 				</ul>
 			</div>

@@ -1,0 +1,34 @@
+{% extends "body.html" %}
+
+{% block content %}
+
+	<!-- Content -->
+	<div class="container" role="main">
+		<div class="jumbotron">
+			<h3 style="margin: 0px; padding: 0px;">Create Project</h3>
+		</div>
+		<div class="panel panel-default">
+			<form method="post" action="/project/formsuccess" class="panel-body validate">
+				{% csrf_token %}
+				<label for="name">Name</label>
+				<h6 style="color:red">{{ error }}</h6>
+				<input type="text" name="name" id="name" placeholder="Name" class="form-control" data-bvalidator="required" data-bvalidator-msg="Name Required">
+				<br>
+				<label for="description">Group Description</label>
+				<input type="text" name="description" id="description" placeholder="Description" class="form-control" data-bvalidator="required" data-bvalidator-msg="Description Required">
+				<br>
+                <label for="language">Programming Language (optional)</label>
+				<input type="text" name="language" id="language" placeholder="Language" class="form-control">
+				<br>
+                <label for="experience">Years Of Experience (optional)</label>
+				<input type="text" name="experience" id="experience" placeholder="Experience" class="form-control">
+				<br>
+                <label for="specialty">Specialty (optional)</label>
+				<input type="text" name="specialty" id="specialty" placeholder="Specialty" class="form-control">
+				<br>
+				<input type="submit" value="Submit" class="btn btn-primary">
+			</form>
+		</div>
+	</div>
+
+{% endblock %}

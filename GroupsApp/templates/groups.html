@@ -4,6 +4,12 @@
 
 	<!-- Content -->
 	<div class="container" role="main">
+        <div class="jumbotron">
+			<h1>Groups</h1>
+            {% if user.is_authenticated %}
+                <a href="/group/form" class="btn btn-primary">Create a group</a>
+            {% endif %}
+		</div>
 		<div class="table-responsive">
 			<table class="table table-striped sortable">
 				<thead>

@@ -2,9 +2,10 @@
 Created by Naman Patwari on 10/10/2016.
 """
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from GroupsApp.forms import MemberForm
+from GroupsApp.models import Group
 from . import models
 from . import forms
 
@@ -23,9 +24,7 @@ def getGroups(request):
 def getGroup(request):
     if request.user.is_authenticated():
         in_name = request.GET.get('name', 'None')
-        in_group = models.Group.objects.filter(name__exact=in_name).first()
-        if in_group is None:
-            return render(request, 'notfound.html', status=404)
+        in_group = get_object_or_404(Group, name=in_name)
         is_member = in_group.members.filter(email__exact=request.user.email)
         context = {
             'group': in_group,
@@ -70,9 +69,7 @@ def getGroupFormSuccess(request):
 @login_required
 def addToGroup(request):
     in_group_name = request.GET.get('name', 'None')
-    in_group = models.Group.objects.filter(name__exact=in_group_name).first()
-    if in_group is None:
-        return render(request, 'notfound.html', status=404)
+    in_group = get_object_or_404(Group, name=in_group_name)
     if in_group.members.filter(email__exact=request.user.email).exists():
         form = MemberForm(request.POST)
         new_member = models.MyUser.objects.get(email__exact=form.data['email'])
@@ -87,9 +84,7 @@ def addToGroup(request):
 @login_required
 def linkToProject(request):
     in_group_name = request.GET.get('name', 'None')
-    in_group = models.Group.objects.filter(name__exact=in_group_name).first()
-    if in_group is None:
-        return render(request, 'notfound.html', status=404)
+    in_group = get_object_or_404(Group, name=in_group_name)
     if in_group.members.filter(email__exact=request.user.email).exists():
         return render(request, 'linkform.html', {'group': in_group})
     return render(request, 'autherror.html')

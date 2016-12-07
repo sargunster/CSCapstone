@@ -3,9 +3,10 @@ UniversitiesApp Views
 
 Created by Jacob Dunbar on 11/5/2016.
 """
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from UniversitiesApp.forms import StudentForm, CourseForm
+from UniversitiesApp.models import University
 from . import models
 from . import forms
 
@@ -24,7 +25,9 @@ def getUniversities(request):
 def getUniversity(request):
     if request.user.is_authenticated():
         in_name = request.GET.get('name', 'None')
-        in_university = models.University.objects.get(name__exact=in_name)
+        in_university = get_object_or_404(University, name=in_name)
+        if in_university is None:
+            return render(request, 'notfound.html', status=404)
         is_member = in_university.members.filter(email__exact=request.user.email)
         context = {
             'university': in_university,
@@ -92,7 +95,7 @@ def unjoinUniversity(request):
         in_name = request.GET.get('name', 'None')
         in_university = models.University.objects.get(name__exact=in_name)
         in_university.members.remove(request.user)
-        in_university.save();
+        in_university.save()
         request.user.university_set.remove(in_university)
         request.user.save()
         context = {
@@ -256,16 +259,16 @@ def joinCourse(request):
 
 def unjoinCourse(request):
     if request.user.is_authenticated():
-        in_university_name = request.GET.get('name', 'None')
-        in_university = models.University.objects.get(name__exact=in_university_name)
+        university_name = request.GET.get('name', 'None')
+        university = get_object_or_404(University, name=university_name)
         in_course_tag = request.GET.get('course', 'None')
-        in_course = in_university.course_set.get(tag__exact=in_course_tag)
+        in_course = university.course_set.get(tag__exact=in_course_tag)
         in_course.members.remove(request.user)
-        in_course.save();
+        in_course.save()
         request.user.course_set.remove(in_course)
         request.user.save()
         context = {
-            'university': in_university,
+            'university': university,
             'course': in_course,
             'userInCourse': False,
             'userIsTeacher': request.user == in_course.professor
