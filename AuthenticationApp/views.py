@@ -104,7 +104,9 @@ def get_users(request):
 def get_user(request):
     if request.user.is_authenticated():
         in_email = request.GET.get('email', 'None')
-        in_user = MyUser.objects.get(email__exact=in_email)
+        in_user = MyUser.objects.filter(email__exact=in_email).first()
+        if in_user is None:
+            return render(request, 'notfound.html', status=404)
         context = {
             'user': in_user
         }
