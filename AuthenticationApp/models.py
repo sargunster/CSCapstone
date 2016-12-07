@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 # from django.db.models.signals import post_save
+import tinymce.models
 
 
 # Create your models here.
@@ -86,7 +87,7 @@ class MyUser(AbstractBaseUser):
     is_professor = models.BooleanField(default=False, )
     is_engineer = models.BooleanField(default=False, )
 
-    about = models.TextField(default='Nothing here :(', )
+    about = tinymce.models.HTMLField(default='Nothing here :(')
 
     objects = MyUserManager()
 

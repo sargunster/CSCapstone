@@ -5,6 +5,9 @@
     <div class="container theme-showcase" role="main">
         <div class="jumbotron">
             <h3>{{ user.get_full_name }}</h3>
+            {% if can_edit %}
+                <p><a href="/update?email={{ user.email }}" class="btn btn-default">Edit Profile</a></p>
+            {% endif %}
             <p>
                 {% if user.is_student %}
                     Student at <a href="/university?name={{ user.university_set.first.name }}">{{ user.university_set.first.name }}</a>
@@ -19,7 +22,7 @@
                 {% endif %}
             </p>
             <p>Email: {{ user.email }}</p>
-            <p>About me: {{ user.about }}</p>
+            <p>About me: {{ user.about |safe }}</p>
         </div>
     </div>
 {% endblock %}

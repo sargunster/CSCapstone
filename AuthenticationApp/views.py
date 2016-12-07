@@ -76,7 +76,13 @@ def auth_register(request):
 
 @login_required
 def update_profile(request):
-    form = UpdateForm(request.POST or None, instance=request.user)
+    email = request.GET.get('email', None)
+    user = None
+    if request.user.is_staff and email is not None:
+        user = MyUser.objects.filter(email__exact=email).first()
+    if user is None:
+        user = request.user
+    form = UpdateForm(request.POST or None, instance=user)
     if form.is_valid():
         form.save()
         messages.success(request, 'Success, your profile was saved!')
@@ -108,7 +114,8 @@ def get_user(request):
         if in_user is None:
             return render(request, 'notfound.html', status=404)
         context = {
-            'user': in_user
+            'user': in_user,
+            'can_edit': request.user.email == in_user.email or request.user.is_staff
         }
         return render(request, 'user.html', context)
     # render error page if user is not logged in
