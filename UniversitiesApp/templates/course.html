@@ -21,13 +21,16 @@
 			<table class="table table-striped sortable">
 				<thead>
 					<tr>
-						<th>Students</th>
+						<th>Email</th>
+                        <th>Name</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for item in course.members.all %}
 					<tr>
+                        <td>{{ item.email }}</td>
 						<td>{{ item.get_full_name }}</td>
+                        <td><a href="/university/course/removes?name={{ university.name }}&course={{ course.tag }}&member={{ item.email }}" class="btn btn-default">Remove</a></td>
 					</tr>
 					{% endfor %}
 				</tbody>
