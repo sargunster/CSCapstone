@@ -18,7 +18,9 @@ def getProjects(request):
 
 
 def getProject(request):
-    return render(request, 'project.html')
+    project_name = request.GET.get('name', None)
+    project = get_object_or_404(Project, name=project_name)
+    return render(request, 'project.html', {'project': project})
 
 
 @login_required
