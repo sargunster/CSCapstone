@@ -7,6 +7,9 @@
 		<div class="jumbotron">
 			<h1>{{ group.name }}</h1>
 			<p>{{ group.description }}</p>
+            {% if userIsMember %}
+                <a href="/group/linkform?name={{ group.name }}" class="btn btn-default">Link new to project</a>
+            {% endif %}
 		</div>
 	</div>
 	

@@ -11,5 +11,7 @@ urlpatterns = [
     url(r'^group/form$', views.getGroupForm, name='GroupForm'),
     url(r'^group/formsuccess$', views.getGroupFormSuccess, name='GroupFormSuccess'),
     url(r'^group/add$', views.addToGroup, name='GroupAdd'),
+    url(r'^group/linkform$', views.linkToProject, name='GroupLink'),
+    url(r'^group/linkformsuccess$', views.getLinkFormSuccess, name='LinkFormSuccess'),
     url(r'^group$', views.getGroup, name='Group'),
 ]
