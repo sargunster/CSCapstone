@@ -5,6 +5,7 @@ Created by Naman Patwari on 10/4/2016.
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django import forms
 from .models import MyUser
+import tinymce.widgets
 
 
 class LoginForm(forms.Form):
@@ -22,7 +23,7 @@ class RegisterForm(forms.Form):
     firstname = forms.CharField(label="First name", widget=forms.TextInput, required=False)
     lastname = forms.CharField(label="Last name", widget=forms.TextInput, required=False)
 
-    about = forms.CharField(label="About", widget=forms.Textarea, required=False)
+    about = forms.CharField(label="About", widget=tinymce.widgets.TinyMCE(), required=False)
 
     student = forms.BooleanField(label="Is student?", widget=forms.CheckboxInput, required=False)
     professor = forms.BooleanField(label="Is professor?", widget=forms.CheckboxInput, required=False)

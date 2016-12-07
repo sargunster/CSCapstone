@@ -22,7 +22,7 @@
                 {% endif %}
             </p>
             <p>Email: {{ user.email }}</p>
-            <p>About me: {{ user.about }}</p>
+            <p>About me: {{ user.about |safe }}</p>
         </div>
     </div>
 {% endblock %}
