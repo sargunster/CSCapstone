@@ -15,6 +15,7 @@ def getGroups(request):
         groups_list = models.Group.objects.all()
         context = {
             'groups': groups_list,
+            'isStudent': request.user.is_student
         }
         return render(request, 'groups.html', context)
     # render error page if user is not logged in
@@ -36,14 +37,14 @@ def getGroup(request):
 
 
 def getGroupForm(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_student:
         return render(request, 'groupform.html')
     # render error page if user is not logged in
     return render(request, 'autherror.html')
 
 
 def getGroupFormSuccess(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_student:
         if request.method == 'POST':
             form = forms.GroupForm(request.POST)
             if form.is_valid():

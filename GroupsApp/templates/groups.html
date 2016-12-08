@@ -6,7 +6,7 @@
 	<div class="container" role="main">
         <div class="jumbotron">
 			<h1>Groups</h1>
-            {% if user.is_authenticated %}
+            {% if isStudent %}
                 <a href="/group/form" class="btn btn-primary">Create a group</a>
             {% endif %}
 		</div>

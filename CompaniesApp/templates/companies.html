@@ -6,7 +6,7 @@
     <div class="container" role="main">
         <div class="jumbotron">
 			<h1>Companies</h1>
-            {% if user.is_engineer or user.is_professor or user.is_admin %}
+            {% if canCreate %}
                 <a href="/company/form" class="btn btn-primary">Register a company</a>
             {% endif %}
 		</div>

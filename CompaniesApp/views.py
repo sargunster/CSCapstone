@@ -12,11 +12,13 @@ def getCompanies(request):
     if request.user.is_authenticated():
         companies_list = models.Company.objects.all()
         context = {
-            'companies' : companies_list,
+            'companies': companies_list,
+            'canCreate': request.user.is_staff
         }
         return render(request, 'companies.html', context)
     # render error page if user is not logged in
     return render(request, 'autherror.html')
+
 
 def getCompany(request):
     if request.user.is_authenticated():
@@ -32,13 +34,13 @@ def getCompany(request):
     return render(request, 'autherror.html')
 
 def getCompanyForm(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_staff:
         return render(request, 'companyform.html')
     # render error page if user is not logged in
     return render(request, 'autherror.html')
 
 def getCompanyFormSuccess(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_staff:
         if request.method == 'POST':
             form = forms.CompanyForm(request.POST, request.FILES)
             if form.is_valid():
