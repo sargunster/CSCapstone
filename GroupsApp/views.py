@@ -31,7 +31,8 @@ def getGroup(request):
             'group': in_group,
             'userIsMember': is_member,
             'comments': models.Comment.objects.filter(group=in_group),
-            'project': in_group.project
+            'project': in_group.project,
+            'form': forms.CommentForm()
         }
         return render(request, 'group.html', context)
     # render error page if user is not logged in
