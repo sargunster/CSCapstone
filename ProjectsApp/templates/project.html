@@ -7,12 +7,12 @@
 		<div class="jumbotron">
 			<h1>{{ project.name }}</h1>
 			<p>{{ project.description |safe }}</p>
-            {% if isBookmarked %}
+            {% if user.is_authenticated and isBookmarked %}
                 <a href="/unmark?name={{ project.name }}" class="btn btn-default">Remove bookmark</a>
-            {% else %}
+            {% elif user.is_authenticated %}
                 <a href="/mark?name={{ project.name }}" class="btn btn-default">Bookmark</a>
             {% endif %}
-            {% if user.is_engineer or user.is_admin %}
+            {% if user.is_authenticated and user.is_engineer or user.is_admin %}
                 <a href="/project/edit?name={{ project.name }}" class="btn btn-default">Edit Project</a>
                 <a href="/project/delete?name={{ project.name }}" class="btn btn-default">Delete Project</a>
             {% endif %}

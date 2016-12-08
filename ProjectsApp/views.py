@@ -15,14 +15,14 @@ def getProjects(request):
     projects_list = models.Project.objects.all()
     return render(request, 'projects.html', {
         'projects': projects_list,
-        'canCreate': request.user.is_engineer or request.user.is_admin
+        'canCreate': request.user.is_authenticated and (request.user.is_engineer or request.user.is_admin)
     })
 
 
 def getProject(request):
     project_name = request.GET.get('name', None)
     project = get_object_or_404(Project, name=project_name)
-    is_bookmarked = request.user.bookmarks.filter(name__exact=project_name)
+    is_bookmarked = request.user.bookmarks.filter(name__exact=project_name) if request.user.is_authenticated else False
     return render(request, 'project.html', {
         'project': project,
         'isBookmarked': is_bookmarked
