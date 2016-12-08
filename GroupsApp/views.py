@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404
 
 from GroupsApp.forms import MemberForm
 from GroupsApp.models import Group, Comment
+from ProjectsApp.models import Project
 from . import models
 from . import forms
 
@@ -32,11 +33,52 @@ def getGroup(request):
             'userIsMember': is_member,
             'comments': models.Comment.objects.filter(group=in_group),
             'project': in_group.project,
-            'form': forms.CommentForm()
+            'form': forms.CommentForm(),
+            'recommended': recommend_projects(in_group.members.all())
         }
         return render(request, 'group.html', context)
     # render error page if user is not logged in
     return render(request, 'autherror.html')
+
+
+def recommend_projects(users):
+    projects = Project.objects
+    result = []
+    for p in Project.objects.all():
+        if all_can_do(users, p):
+            result.append(p)
+    return result
+
+
+def all_can_do(users, project):
+    for u in users:
+        if not can_do(u, project):
+            return False
+    return True
+
+
+def can_do(user, project):
+
+    if project.experience > user.experience:
+        return False
+
+    user_languages = [x.strip().lower() for x in (user.qualifications or '').split(',')]
+    project_languages = [x.strip().lower() for x in (project.language or '').split(',')]
+
+    if not set(project_languages).issubset(user_languages):
+        return False
+
+    user_specializations = [x.strip().lower() for x in (user.specification or '').split(',')]
+    project_specializations = [x.strip().lower() for x in (project.specialty or '').split(',')]
+
+    print(user.email)
+    print(user_specializations)
+    print(project_specializations)
+
+    if not set(project_specializations).issubset(user_specializations):
+        return False
+
+    return True
 
 
 def getGroupForm(request):

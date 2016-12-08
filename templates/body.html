@@ -2,68 +2,72 @@
 
 {% block body %}
 
-	<!-- Navbar -->
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/">CS Capstone Marketplace</a>
-			</div>
-			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-                <li><a href="/users">Users</a> </li>
-                <li><a href="/group/all">Groups</a></li>
-                <li><a href="/project/all">Projects</a></li>
-                <li><a href="/company/all">Companies</a></li>
-                <li><a href="/university/all">Universities</a></li>
-                <li><a href="/marks">Bookmarks</a></li>
-				{% if user.is_authenticated == False %}
-					<li><a href="/login">Login</a></li>
-					<li><a href="/register">Register</a></li>
-				{% else %}
-                    <li role="presentation" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						  {{ user.get_full_name }}<span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="/user?email={{ user.email }}">View Account</a></li>
-							<li><a href="/update">Edit Info</a></li>
-                            <li><a href="/updatequal">Add qualifications</a></li>
-							<li><a href="/logout">Logout</a></li>
-						</ul>
-					</li>
-				{% endif %}
-				</ul>
-			</div>
-		</div>
-	</nav>
+    <!-- Navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">CS Capstone Marketplace</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/users">Users</a></li>
+                    <li><a href="/group/all">Groups</a></li>
+                    <li><a href="/project/all">Projects</a></li>
+                    <li><a href="/company/all">Companies</a></li>
+                    <li><a href="/university/all">Universities</a></li>
+                    <li><a href="/marks">Bookmarks</a></li>
+                    {% if user.is_authenticated == False %}
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Register</a></li>
+                    {% else %}
+                        <li role="presentation" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                               aria-haspopup="true" aria-expanded="false">
+                                {{ user.get_full_name }}<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/user?email={{ user.email }}">View Account</a></li>
+                                <li><a href="/update">Edit Info</a></li>
+                                {% if user.is_student %}
+                                    <li><a href="/updatequal">Add qualifications</a></li>
+                                {% endif %}
+                                <li><a href="/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
 
 
-	<!-- Alerts -->
-	{% if messages %}
-	<div class='section container'>
-		<div class='section-container'>
-			{% for message in messages %}
-			<div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
-			{% endfor %}
-		</div>
-	</div>
-	{% endif %}
+    <!-- Alerts -->
+    {% if messages %}
+        <div class='section container'>
+            <div class='section-container'>
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 
 
-	{% block content %}
-	<!-- Content -->
-	<div class="container theme-showcase" role="main">
-		<div class="jumbotron">
-			<h1>CS Capstone Marketplace</h1>
-			<p>Hello World!</p>
-		</div>
-	</div>
-	{% endblock %}
+    {% block content %}
+        <!-- Content -->
+        <div class="container theme-showcase" role="main">
+            <div class="jumbotron">
+                <h1>CS Capstone Marketplace</h1>
+                <p>Hello World!</p>
+            </div>
+        </div>
+    {% endblock %}
 
 {% endblock %}

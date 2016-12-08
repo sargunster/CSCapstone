@@ -26,9 +26,11 @@
             </p>
             <p>Email: {{ user.email }}</p>
             <p>About me: {{ user.about |safe }}</p>
-            <p>Qualifications: {{ user.qualifications }}</p>
-            <p>Specializations: {{ user.specializations }}</p>
-            <p>Experience: {{ user.experience }}</p>
+            {% if user.is_student %}
+                <p>Programming languages: {{ user.qualifications }}</p>
+                <p>Specializations: {{ user.specification }}</p>
+                <p>Experience: {{ user.experience }}</p>
+            {% endif %}
         </div>
         {% if user.is_student %}
             <h3>Groups</h3>
