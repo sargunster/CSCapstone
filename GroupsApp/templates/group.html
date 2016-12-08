@@ -11,7 +11,10 @@
                 <p>Project: <a href="/project?name={{ project.name }}">{{ project.name }}</a></p>
             {% endif %}
             {% if userIsMember %}
-                <p><a href="/group/linkform?name={{ group.name }}" class="btn btn-default">Link to project</a></p>
+                <div>
+                    <a href="/group/linkform?name={{ group.name }}" class="btn btn-default">Link to project</a>
+                    <a href="/group/delete?name={{ group.name }}" class="btn btn-default">Delete group</a>
+                </div>
             {% endif %}
         </div>
     </div>

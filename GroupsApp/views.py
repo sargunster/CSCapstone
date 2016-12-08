@@ -69,6 +69,15 @@ def getGroupFormSuccess(request):
 
 
 @login_required
+def deleteGroup(request):
+    in_group_name = request.GET.get('name', 'None')
+    in_group = get_object_or_404(Group, name=in_group_name)
+    if in_group.members.filter(email__exact=request.user.email).exists():
+        in_group.delete()
+    return getGroups(request)
+
+
+@login_required
 def addToGroup(request):
     in_group_name = request.GET.get('name', 'None')
     in_group = get_object_or_404(Group, name=in_group_name)
