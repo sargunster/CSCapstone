@@ -16,4 +16,4 @@ class LinkForm(forms.Form):
     project = forms.CharField(label='Name', max_length=100)
 
 class CommentForm(forms.Form):
-    comment = forms.CharField(label="comment", widget=tinymce.widgets.TinyMCE(attrs={'cols': 80, 'rows': 5}), required=True)
+    comment = forms.CharField(label="comment", widget=tinymce.widgets.TinyMCE(attrs={'cols': 80, 'rows': 5, 'novalidate': None}), required=True)

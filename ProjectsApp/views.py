@@ -55,3 +55,13 @@ def getProjectFormSuccess(request):
         'project': new_project
     }
     return render(request, 'project.html', context)
+
+
+@login_required
+def deleteProject(request):
+    if not (request.user.is_engineer or request.user.is_admin):
+        return render(request, 'autherror.html')
+    project_name = request.GET.get('name', 'None')
+    project = get_object_or_404(Project, name=project_name)
+    project.delete()
+    return getProjects(request)
