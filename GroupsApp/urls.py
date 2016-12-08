@@ -15,4 +15,6 @@ urlpatterns = [
     url(r'^group/linkform$', views.linkToProject, name='GroupLink'),
     url(r'^group/linkformsuccess$', views.getLinkFormSuccess, name='LinkFormSuccess'),
     url(r'^group$', views.getGroup, name='Group'),
+    url(r'^group/addcomment$', views.addComment, name='AddComment'),
+    url(r'^group/removecomment$', views.removeComment, name='RemoveComment')
 ]

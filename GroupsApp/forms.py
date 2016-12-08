@@ -13,3 +13,6 @@ class MemberForm(forms.Form):
 
 class LinkForm(forms.Form):
     project = forms.CharField(label='Name', max_length=100)
+
+class CommentForm(forms.Form):
+    comment = forms.CharField(label='Text', max_length=500)

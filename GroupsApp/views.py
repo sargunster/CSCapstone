@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
 from GroupsApp.forms import MemberForm
-from GroupsApp.models import Group
+from GroupsApp.models import Group, Comment
 from . import models
 from . import forms
 
@@ -30,6 +30,7 @@ def getGroup(request):
         context = {
             'group': in_group,
             'userIsMember': is_member,
+            'comments': models.Comment.objects.filter(group=in_group)
         }
         return render(request, 'group.html', context)
     # render error page if user is not logged in
@@ -115,3 +116,26 @@ def getLinkFormSuccess(request):
         in_group.save()
         return getGroup(request)
     return render(request, 'autherror.html')
+
+
+@login_required
+def addComment(request):
+    form = forms.CommentForm(request.POST)
+    in_group_name = request.GET.get('name', 'None')
+    in_group = get_object_or_404(Group, name=in_group_name)
+    text = form.data['comment']
+    new_comment = models.Comment(
+        text = text,
+        user = request.user,
+        group = in_group
+    )
+    new_comment.save()
+    return getGroup(request)
+
+
+@login_required
+def removeComment(request):
+    comment_id = request.GET.get('id', 'None')
+    comment = get_object_or_404(Comment, id=comment_id)
+    comment.delete()
+    return getGroup(request)
