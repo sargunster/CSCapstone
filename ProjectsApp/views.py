@@ -15,7 +15,7 @@ def getProjects(request):
     projects_list = models.Project.objects.all()
     return render(request, 'projects.html', {
         'projects': projects_list,
-        'canCreate': request.user.is_engineer
+        'canCreate': request.user.is_engineer or request.user.is_admin
     })
 
 
@@ -43,7 +43,7 @@ def update_project(request):
 
 @login_required
 def getProjectForm(request):
-    if request.user.is_engineer:
+    if request.user.is_engineer or request.user.is_admin:
         form = ProjectForm(request.POST or None)
         if form.is_valid():
             if models.Project.objects.filter(name__exact=form.data['name']).exists():
