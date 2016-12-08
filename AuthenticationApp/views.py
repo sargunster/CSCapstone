@@ -6,11 +6,14 @@ Created by Naman Patwari on 10/4/2016.
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 
 from .forms import LoginForm, RegisterForm, UpdateForm
 from .models import MyUser
+
+from ProjectsApp.models import Project
+import ProjectsApp.views
 
 
 # Auth Views
@@ -120,3 +123,30 @@ def get_user(request):
         return render(request, 'user.html', context)
     # render error page if user is not logged in
     return render(request, 'autherror.html')
+
+
+@login_required
+def add_bookmark(request):
+    user = request.user
+    project_name = request.GET.get('name', None)
+    project = get_object_or_404(Project, name=project_name)
+    user.bookmarks.add(project)
+    user.save()
+    return ProjectsApp.views.getProject(request)
+
+
+@login_required
+def remove_bookmark(request):
+    user = request.user
+    project_name = request.GET.get('name', None)
+    project = get_object_or_404(Project, name=project_name)
+    user.bookmarks.remove(project)
+    user.save()
+    return ProjectsApp.views.getProject(request)
+
+
+@login_required
+def get_bookmarks(request):
+    user = request.user
+    projects = user.bookmarks
+    return render(request, 'bookmarks.html', {'projects': projects})

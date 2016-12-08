@@ -14,23 +14,31 @@ def getProjects(request):
     projects_list = models.Project.objects.all()
     return render(request, 'projects.html', {
         'projects': projects_list,
+        'canCreate': request.user.is_engineer
     })
 
 
 def getProject(request):
     project_name = request.GET.get('name', None)
     project = get_object_or_404(Project, name=project_name)
-    return render(request, 'project.html', {'project': project})
+    is_bookmarked = request.user.bookmarks.filter(name__exact=project_name)
+    return render(request, 'project.html', {
+        'project': project,
+        'isBookmarked': is_bookmarked
+    })
 
 
 @login_required
 def getProjectForm(request):
-    return render(request, 'projectform.html')
+    if request.user.is_engineer:
+        return render(request, 'projectform.html')
+    else:
+        return render(request, 'autherror.html', status=403)
 
 
 @login_required
 def getProjectFormSuccess(request):
-    if not (request.user.is_engineer or request.user.is_admin):
+    if not request.user.is_engineer:
         return render(request, 'autherror.html')
     form = ProjectForm(request.POST)
     if models.Project.objects.filter(name__exact=form.data['name']).exists():
@@ -43,4 +51,7 @@ def getProjectFormSuccess(request):
         specialty=form.data['specialty']
     )
     new_project.save()
-    return render(request, 'project.html')
+    context = {
+        'project': new_project
+    }
+    return render(request, 'project.html', context)

@@ -78,13 +78,14 @@ def joinCompany(request):
         }
         return render(request, 'company.html', context)
     return render(request, 'autherror.html')
-    
+
+
 def unjoinCompany(request):
     if request.user.is_authenticated():
         in_name = request.GET.get('name', 'None')
         in_company = models.Company.objects.get(name__exact=in_name)
         in_company.members.remove(request.user)
-        in_company.save();
+        in_company.save()
         request.user.company_set.remove(in_company)
         request.user.save()
         context = {
@@ -93,4 +94,3 @@ def unjoinCompany(request):
         }
         return render(request, 'company.html', context)
     return render(request, 'autherror.html')
-    

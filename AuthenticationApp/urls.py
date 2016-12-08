@@ -13,5 +13,8 @@ urlpatterns = [
     url(r'^register$', views.auth_register, name='Register'),
     url(r'^update$', views.update_profile, name='UpdateProfile'),
     url(r'^users$', views.get_users, name='GetUsers'),
-    url(r'^user$', views.get_user, name='GetUser')
+    url(r'^user$', views.get_user, name='GetUser'),
+    url(r'^mark$', views.add_bookmark, name='AddBookmark'),
+    url(r'^unmark$', views.remove_bookmark, name='RemoveBookmark'),
+    url(r'^marks$', views.get_bookmarks, name='GetBookmarks')
 ]
