@@ -55,7 +55,7 @@
                 {% for item in comments %}
                 <tr>
                     <td>{{ item.user.get_full_name }}</td>
-                    <td>{{ item.text }}</td>
+                    <td>{{ item.text |safe }}</td>
                     {% if user.email == item.user.email %}
                         <td><a href="/group/removecomment?name={{ group.name }}&id={{ item.id }}">Remove</a></td>
                     {% endif %}
@@ -66,6 +66,7 @@
         <form method="post" enctype="multipart/form-data" action="/group/addcomment?name={{ group.name }}" class="panel-body validate">
             {% csrf_token %}
             {{ form }}
+            <br/>
             <input type="submit" value="Submit" class="btn btn-primary">
         </form>
 	</div>
