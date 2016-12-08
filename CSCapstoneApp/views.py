@@ -4,11 +4,12 @@ Created by Harris Christiansen on 9/18/16.
 """
 from django.shortcuts import render
 
+from ProjectsApp.models import Project
+from AuthenticationApp.models import MyUser
+
 
 def getIndex(request):
-    return render(request, 'index.html', {
-        'foo': 'bar',
-    })
+    return render(request, 'index.html')
 
 
 def getTable(request):

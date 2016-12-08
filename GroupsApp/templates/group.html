@@ -20,39 +20,62 @@
     </div>
 
     <div class="container">
-        <div class="table-responsive">
+        <h3>Members</h3>
+        <table class="table table-striped sortable">
+            <thead>
+            <tr>
+                <th>Users</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in group.members.all %}
+                <tr>
+                    <td>{{ item.get_full_name }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>
+                    {% if userIsMember %}
+                        <div>
+                            <form action="/group/add?name={{ group.name }}" method="post">
+                                {% csrf_token %}
+                                <input type="text" name="email" id="email" placeholder="Email">
+                                <input type="submit" value="Add Member">
+                            </form>
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        {% if project == None %}
+            <h3>Recommended Projects</h3>
             <table class="table table-striped sortable">
                 <thead>
                 <tr>
-                    <th>Users</th>
+                    <th>Project</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for item in group.members.all %}
+                {% for item in recommended %}
                     <tr>
-                        <td>{{ item.get_full_name }}</td>
+                        <td>
+                            <a href="/project?name={{ item.name }}">{{ item.name }}</a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-        </div>
-        {% if userIsMember %}
-            <div>
-                <form action="/group/add?name={{ group.name }}" method="post">
-                    {% csrf_token %}
-                    <input type="text" name="email" id="email" placeholder="Email">
-                    <input type="submit" value="Add Member">
-                </form>
-            </div>
         {% endif %}
+        <h3>Comments</h3>
         <table class="table table-striped sortable">
             <thead>
-                <tr>
-                    <th>Comments</th>
-                </tr>
+            <tr>
+                <th>Comments</th>
+            </tr>
             </thead>
             <tbody>
-                {% for item in comments %}
+            {% for item in comments %}
                 <tr>
                     <td><a href="/user?email={{ item.user.email }}">{{ item.user.get_full_name }}</a></td>
                     <td>{{ item.text |safe }}</td>
@@ -60,15 +83,16 @@
                         <td><a href="/group/removecomment?name={{ group.name }}&id={{ item.id }}">Remove</a></td>
                     {% endif %}
                 </tr>
-                {% endfor %}
+            {% endfor %}
             </tbody>
         </table>
-        <form method="post" enctype="multipart/form-data" action="/group/addcomment?name={{ group.name }}" class="panel-body validate">
+        <form method="post" enctype="multipart/form-data" action="/group/addcomment?name={{ group.name }}"
+              class="panel-body validate">
             {% csrf_token %}
             {{ form }}
             <br/>
             <input type="submit" value="Submit" class="btn btn-primary">
         </form>
-	</div>
+    </div>
 
 {% endblock %}

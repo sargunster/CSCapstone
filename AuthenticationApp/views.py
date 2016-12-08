@@ -16,6 +16,8 @@ from ProjectsApp.models import Project
 from GroupsApp.models import Group
 from UniversitiesApp.models import Course
 
+from CSCapstoneApp.views import getIndex
+
 import ProjectsApp.views
 
 
@@ -49,7 +51,7 @@ def auth_login(request):
 def auth_logout(request):
     logout(request)
     messages.success(request, 'Success, you are now logged out')
-    return render(request, 'index.html')
+    return getIndex(request)
 
 
 def auth_register(request):
@@ -104,7 +106,12 @@ def update_profile(request):
 
 @login_required
 def update_qual(request):
-    form = QualificationsForm()
+    u = request.user
+    form = QualificationsForm(data={
+        'qualifications': u.qualifications,
+        'specializations': u.specification,
+        'experience': u.experience
+    })
     context = {
         "form": form,
         "page_name": "Update",
@@ -117,13 +124,10 @@ def update_qual(request):
 def qual_success(request):
     form = QualificationsForm(request.POST)
     request.user.qualifications = form.data['qualifications']
-    request.user.specializations = form.data['specializations']
+    request.user.specification = form.data['specializations']
     request.user.experience = form.data['experience']
-    context = {
-        'user': request.user,
-        'can_edit': True
-    }
-    return render(request, 'user.html', context)
+    request.user.save()
+    return render(request, 'index.html')
 
 
 def get_users(request):
