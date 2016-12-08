@@ -6,7 +6,7 @@
     <div class="container" role="main">
         <div class="jumbotron">
 			<h1>Universities</h1>
-            {% if user.is_authenticated %}
+            {% if canCreate %}
                 <a href="/university/form" class="btn btn-primary">Register a university</a>
             {% endif %}
 		</div>

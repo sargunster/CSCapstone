@@ -16,6 +16,7 @@ def getUniversities(request):
         universities_list = models.University.objects.all()
         context = {
             'universities': universities_list,
+            'canCreate': request.user.is_staff
         }
         return render(request, 'universities.html', context)
     # render error page if user is not logged in
@@ -39,14 +40,14 @@ def getUniversity(request):
 
 
 def getUniversityForm(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_staff:
         return render(request, 'universityform.html')
     # render error page if user is not logged in
     return render(request, 'autherror.html')
 
 
 def getUniversityFormSuccess(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_staff:
         if request.method == 'POST':
             form = forms.UniversityForm(request.POST, request.FILES)
             if form.is_valid():

@@ -8,6 +8,7 @@ from django.shortcuts import render
 from . import models
 from . import forms
 
+
 def getCompanies(request):
     if request.user.is_authenticated():
         companies_list = models.Company.objects.all()
