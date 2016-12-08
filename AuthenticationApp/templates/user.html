@@ -10,11 +10,14 @@
             {% endif %}
             <p>
                 {% if user.is_student %}
-                    Student at <a href="/university?name={{ user.university_set.first.name }}">{{ user.university_set.first.name }}</a>
+                    Student at
+                    <a href="/university?name={{ user.university_set.first.name }}">{{ user.university_set.first.name }}</a>
                 {% elif user.is_professor %}
-                    Professor at <a href="/university?name={{ user.university_set.first.name }}">{{ user.university_set.first.name }}</a>
+                    Professor at
+                    <a href="/university?name={{ user.university_set.first.name }}">{{ user.university_set.first.name }}</a>
                 {% elif user.is_engineer %}
-                    Engineer at <a href="/company?name={{ user.company_set.first.name }}">{{ user.company_set.first.name }}</a>
+                    Engineer at
+                    <a href="/company?name={{ user.company_set.first.name }}">{{ user.company_set.first.name }}</a>
                 {% elif user.is_admin %}
                     Site Admin
                 {% else %}
@@ -24,5 +27,42 @@
             <p>Email: {{ user.email }}</p>
             <p>About me: {{ user.about |safe }}</p>
         </div>
+        {% if user.is_student %}
+            <h3>Groups</h3>
+            <table class="table table-striped sortable">
+                <thead>
+                <tr>
+                    <th>Group</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in groups.all %}
+                    <tr>
+                        <td>
+                            <a href="/group?name={{ item.name }}">{{ item.name }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <h3>Courses</h3>
+            <table class="table table-striped sortable">
+                <thead>
+                <tr>
+                    <th>Course</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in courses.all %}
+                    <tr>
+                        <td>
+                            <a href="/university/course?name={{ item.university.name }}&course={{ item.tag }}">{{ item.name }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     </div>
 {% endblock %}
