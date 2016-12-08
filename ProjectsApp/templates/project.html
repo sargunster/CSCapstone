@@ -12,6 +12,9 @@
             {% else %}
                 <a href="/mark?name={{ project.name }}" class="btn btn-default">Bookmark</a>
             {% endif %}
+            {% if user.is_engineer or user.is_admin %}
+                <a href="/project/delete?name={{ project.name }}" class="btn btn-default">Delete Project</a>
+            {% endif %}
 		</div>
 	</div>
 
