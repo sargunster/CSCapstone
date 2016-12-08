@@ -30,6 +30,7 @@ def getGroup(request):
         context = {
             'group': in_group,
             'userIsMember': is_member,
+            'project': in_group.project
         }
         return render(request, 'group.html', context)
     # render error page if user is not logged in

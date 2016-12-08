@@ -33,7 +33,6 @@ def getUniversity(request):
             'userIsMember': is_member,
             'userIsProfessor': is_member and request.user.is_professor
         }
-        print(context)
         return render(request, 'university.html', context)
     # render error page if user is not logged in
     return render(request, 'autherror.html')
@@ -178,7 +177,7 @@ def addStudentToCourse(request):
     in_university = models.University.objects.get(name__exact=in_university_name)
     in_course_tag = request.GET.get('course', 'None')
     in_course = in_university.course_set.get(tag__exact=in_course_tag)
-    if request.user.is_authenticated() and (request.user is in_course.professor or request.user.is_admin):
+    if request.user.is_authenticated() and request.user == in_course.professor:
         form = StudentForm(request.POST)
         users = models.MyUser.objects.filter(email__exact=form.data['email'])
         if users.exists() is False:
@@ -203,7 +202,7 @@ def removeStudentFromCourse(request):
     in_university = models.University.objects.get(name__exact=in_university_name)
     in_course_tag = request.GET.get('course', 'None')
     in_course = in_university.course_set.get(tag__exact=in_course_tag)
-    if request.user.is_authenticated() and (request.user is in_course.professor or request.user.is_admin):
+    if request.user.is_authenticated() and request.user == in_course.professor:
         in_email = request.GET.get('member', 'None')
         users = models.MyUser.objects.filter(email__exact=in_email)
         if users.exists() is False:
