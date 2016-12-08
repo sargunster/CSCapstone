@@ -8,6 +8,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 # from django.db.models.signals import post_save
 import tinymce.models
+from ProjectsApp.models import Project
 
 
 # Create your models here.
@@ -88,6 +89,8 @@ class MyUser(AbstractBaseUser):
     is_engineer = models.BooleanField(default=False, )
 
     about = tinymce.models.HTMLField(default='Nothing here :(')
+
+    bookmarks = models.ManyToManyField(Project)
 
     objects = MyUserManager()
 

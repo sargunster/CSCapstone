@@ -21,7 +21,11 @@ def getProjects(request):
 def getProject(request):
     project_name = request.GET.get('name', None)
     project = get_object_or_404(Project, name=project_name)
-    return render(request, 'project.html', {'project': project})
+    is_bookmarked = request.user.bookmarks.filter(name__exact=project_name)
+    return render(request, 'project.html', {
+        'project': project,
+        'isBookmarked': is_bookmarked
+    })
 
 
 @login_required
