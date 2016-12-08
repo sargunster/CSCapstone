@@ -7,6 +7,9 @@
 		<div class="jumbotron">
 			<h1>{{ project.name }}</h1>
 			<p>{{ project.description |safe }}</p>
+            <p>Programming languages: {{ project.language }}</p>
+            <p>Years of experience: {{ project.experience }}</p>
+            <p>Specialization: {{ project.specialty }}</p>
             {% if user.is_authenticated and isBookmarked %}
                 <a href="/unmark?name={{ project.name }}" class="btn btn-default">Remove bookmark</a>
             {% elif user.is_authenticated %}
