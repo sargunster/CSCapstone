@@ -54,7 +54,7 @@
             <tbody>
                 {% for item in comments %}
                 <tr>
-                    <td>{{ item.user.get_full_name }}</td>
+                    <td><a href="/user?email={{ item.user.email }}">{{ item.user.get_full_name }}</a></td>
                     <td>{{ item.text |safe }}</td>
                     {% if user.email == item.user.email %}
                         <td><a href="/group/removecomment?name={{ group.name }}&id={{ item.id }}">Remove</a></td>
