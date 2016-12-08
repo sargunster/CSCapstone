@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 
-from .forms import LoginForm, RegisterForm, UpdateForm
+from .forms import LoginForm, RegisterForm, UpdateForm, QualificationsForm
 from .models import MyUser
 
 from ProjectsApp.models import Project
@@ -97,6 +97,30 @@ def update_profile(request):
         "links": ["logout"],
     }
     return render(request, 'auth_form.html', context)
+
+
+@login_required
+def update_qual(request):
+    form = QualificationsForm()
+    context = {
+        "form": form,
+        "page_name": "Update",
+        "button_value": "Update"
+    }
+    return render(request, 'qual_form.html', context)
+
+
+@login_required
+def qual_success(request):
+    form = QualificationsForm(request.POST)
+    request.user.qualifications = form.data['qualifications']
+    request.user.specializations = form.data['specializations']
+    request.user.experience = form.data['experience']
+    context = {
+        'user': request.user,
+        'can_edit': True
+    }
+    return render(request, 'user.html', context)
 
 
 def get_users(request):
