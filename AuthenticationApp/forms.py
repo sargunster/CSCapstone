@@ -119,6 +119,12 @@ class UpdateForm(forms.ModelForm):
             raise forms.ValidationError("User cannot be Professor and Engineer at the same time!")
 
 
+class QualificationsForm(forms.Form):
+    qualifications = forms.CharField(label="Qualifications (comma-separated)", widget=forms.TextInput, required=False)
+    experience = forms.IntegerField(label="Years of experience", widget=forms.NumberInput, required=False)
+    specializations = forms.CharField(label="Specializations (comma-separated", widget=forms.TextInput, required=False)
+
+
 """Admin Forms"""
 
 

@@ -90,6 +90,22 @@ class MyUser(AbstractBaseUser):
 
     about = tinymce.models.HTMLField(default='Nothing here :(')
 
+    qualifications = models.CharField(
+        max_length=10000,
+        null=True,
+        blank=True,
+        default=None
+    )
+
+    specification = models.CharField(
+        max_length=10000,
+        null=True,
+        blank=True,
+        default=None
+    )
+
+    experience = models.IntegerField(default=0)
+
     bookmarks = models.ManyToManyField(Project)
 
     objects = MyUserManager()
