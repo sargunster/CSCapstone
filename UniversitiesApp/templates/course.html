@@ -33,7 +33,7 @@
                 <tbody>
                 {% for item in course.members.all %}
                     <tr>
-                        <td>{{ item.email }}</td>
+                        <td><a href="/user?email={{ item.email }}">{{ item.email }}</a></td>
                         <td>{{ item.get_full_name }}</td>
                         <td>
                             <a href="/university/course/removes?name={{ university.name }}&course={{ course.tag }}&member={{ item.email }}"

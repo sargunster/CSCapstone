@@ -13,6 +13,9 @@ from .forms import LoginForm, RegisterForm, UpdateForm, QualificationsForm
 from .models import MyUser
 
 from ProjectsApp.models import Project
+from GroupsApp.models import Group
+from UniversitiesApp.models import Course
+
 import ProjectsApp.views
 
 
@@ -142,7 +145,9 @@ def get_user(request):
             return render(request, 'notfound.html', status=404)
         context = {
             'user': in_user,
-            'can_edit': request.user.email == in_user.email or request.user.is_staff
+            'can_edit': request.user.email == in_user.email or request.user.is_staff,
+            'groups': Group.objects.filter(members__email__exact=in_email),
+            'courses': Course.objects.filter(members__email__exact=in_email),
         }
         return render(request, 'user.html', context)
     # render error page if user is not logged in
