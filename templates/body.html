@@ -17,12 +17,14 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/users">Users</a></li>
-                    <li><a href="/group/all">Groups</a></li>
                     <li><a href="/project/all">Projects</a></li>
-                    <li><a href="/company/all">Companies</a></li>
-                    <li><a href="/university/all">Universities</a></li>
-                    <li><a href="/marks">Bookmarks</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="/users">Users</a></li>
+                        <li><a href="/group/all">Groups</a></li>
+                        <li><a href="/company/all">Companies</a></li>
+                        <li><a href="/university/all">Universities</a></li>
+                        <li><a href="/marks">Bookmarks</a></li>
+                    {% endif %}
                     {% if user.is_authenticated == False %}
                         <li><a href="/login">Login</a></li>
                         <li><a href="/register">Register</a></li>
